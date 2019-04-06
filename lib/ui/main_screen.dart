@@ -1,9 +1,8 @@
 import 'package:assign_02/database/DBhelper.dart';
 import 'package:assign_02/model/Contact.dart';
-import 'contact_list.dart';
+import 'complete_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'placeholder.dart';
+import 'todo_screen.dart';
 
 Future<List<Contact>> getContactsFormDBAll() async {
   var dbHelper = DBHelper();
@@ -21,7 +20,7 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    MyContactList(),
+    MyTodoList(),
     MyCompleteList(),
   ];
 

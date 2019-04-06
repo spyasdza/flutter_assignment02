@@ -98,9 +98,9 @@ class DBHelper {
   }
 
   //Delete
-  void deleteContact (Contact contact) async {
+  void deleteContact () async {
     var db_connection = await db;
-    String query = 'DELETE FROM $TABLE_NAME WHERE id=${contact.id}';
+    String query = 'DELETE FROM $TABLE_NAME WHERE done=1';
     await db_connection.transaction((transaction) async{
       return await transaction.rawQuery(query);
     });

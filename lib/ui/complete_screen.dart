@@ -5,18 +5,25 @@ import 'package:assign_02/model/Contact.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-Future<List<Contact>> getContactsFormDB() async {
-  var dbHelper = DBHelper();
-  Future<List<Contact>> contacts = dbHelper.getContacts();
+var dbHelper = DBHelper();
+
+Future<List<Contact>> getContactsFormDBC() async {
+  Future<List<Contact>> contacts = dbHelper.getContactsC();
   return contacts;
 }
 
-class MyContactList extends StatefulWidget {
+// Future<List<Contact>> getContactsFormDBCasList() async {
+//   var dbHelper = DBHelper();
+//   Future<List<Contact>> contacts = dbHelper.getContactsC();
+//   return contacts;
+// }
+
+class MyCompleteList extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new MyContactListState();
+  State<StatefulWidget> createState() => new MyCompleteListState();
 }
 
-class MyContactListState extends State<MyContactList> {
+class MyCompleteListState extends State<MyCompleteList> {
   final controller_name = new TextEditingController();
 
   @override
@@ -29,10 +36,30 @@ class MyContactListState extends State<MyContactList> {
               new FlatButton(
                   child: new IconTheme(
                     data: new IconThemeData(color: Colors.white),
-                    child: new Icon(Icons.add),
+                    child: new Icon(Icons.delete),
                   ),
+                  //delete
                   onPressed: () {
-                    Navigator.pushNamed(context, "/second");
+                              dbHelper.deleteContact();
+                    // var dbHelper = DBHelper();
+                    // Future<List<Contact>> contacts = dbHelper.getContactsC();
+                    // print(contacts);
+                    // ;
+                    // print(contacts);
+                    // FutureBuilder<List<Contact>>(
+                    //   future: getContactsFormDBC(),
+                    //   builder: (context, snapshot){
+                    //     for (int i=0; i<snapshot.data.length; i++){
+                    //       print("This is snapshot data -> ${snapshot.data}");
+                    //       dbHelper.deleteContact(snapshot.data[i]);
+                    //     }
+                    //   }
+                    // );
+
+                    Fluttertoast.showToast(msg: 'Complete list was delete', toastLength: Toast.LENGTH_SHORT,);
+                    setState(() {
+                      getContactsFormDBC();
+                    });
                   },
                 )
         ],
@@ -42,14 +69,14 @@ class MyContactListState extends State<MyContactList> {
         child: Container(
           padding: EdgeInsets.all(16.0),
           child: FutureBuilder<List<Contact>>(
-            future: getContactsFormDB(),
+            future: getContactsFormDBC(),
             builder: (context, snapshot) {
               if (snapshot.data != null) {
-                if (snapshot.hasData) {
+                if (snapshot.data.length > 0) {
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
-                      return Row(
+                      return new Row(
                         children: <Widget>[
                           Expanded(
                             child: Column(
@@ -65,21 +92,21 @@ class MyContactListState extends State<MyContactList> {
                             ),
                           ),
 
-                          //update/
+                          //update/del button
                           GestureDetector(
                             onTap: () {
-                              var dbHelper = DBHelper();
+                              // var dbHelper = DBHelper();
                               Contact contact = new Contact();
                               contact.id = snapshot.data[index].id;
-                              contact.done = 1;
+                              contact.done = 0;
                               dbHelper.updateContact(contact);
-                              Fluttertoast.showToast(msg: 'Subject was check', toastLength: Toast.LENGTH_SHORT,);
+                              Fluttertoast.showToast(msg: 'Subject was uncheck', toastLength: Toast.LENGTH_SHORT,);
                               setState(() {
-                               getContactsFormDB(); 
+                               getContactsFormDBC();
                               });
                             },
                             child: Icon(
-                              Icons.check_box_outline_blank,
+                              Icons.check_box,
                               color: Colors.red,
                             ),
                           ),
@@ -88,13 +115,21 @@ class MyContactListState extends State<MyContactList> {
                     },
                   );
                 }
+                else{
+                return new Container(
+                alignment: AlignmentDirectional.center,
+                child: Text("No data found.."),
+                );
+                }
               }
 
-              //show loading while snap shot not getting data
-              return new Container(
+              //show text while snap shot not getting data
+              else{
+                return new Container(
                 alignment: AlignmentDirectional.center,
-                child: new CircularProgressIndicator(),
-              );
+                child: Text("No data found.."),
+                );
+              }
             },
           ),
         ),

@@ -5,20 +5,18 @@ import 'package:assign_02/model/Contact.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-var check = 1;
-
-Future<List<Contact>> getContactsFormDBC() async {
+Future<List<Contact>> getContactsFormDB() async {
   var dbHelper = DBHelper();
-  Future<List<Contact>> contacts = dbHelper.getContactsC();
+  Future<List<Contact>> contacts = dbHelper.getContacts();
   return contacts;
 }
 
-class MyCompleteList extends StatefulWidget {
+class MyTodoList extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new MyCompleteListState();
+  State<StatefulWidget> createState() => new MyTodoListState();
 }
 
-class MyCompleteListState extends State<MyCompleteList> {
+class MyTodoListState extends State<MyTodoList> {
   final controller_name = new TextEditingController();
 
   @override
@@ -31,25 +29,10 @@ class MyCompleteListState extends State<MyCompleteList> {
               new FlatButton(
                   child: new IconTheme(
                     data: new IconThemeData(color: Colors.white),
-                    child: new Icon(Icons.delete),
+                    child: new Icon(Icons.add),
                   ),
-                  //delete
                   onPressed: () {
-                    var dbHelper = DBHelper();
-                    FutureBuilder<List<Contact>>(
-                      future: getContactsFormDBC(),
-                      builder: (context, snapshot){
-                        print("This is snapshot data -> ${snapshot.data}");
-                        for (int i=0; i<snapshot.data.length; i++){
-                          dbHelper.deleteContact(snapshot.data[i]);
-                        }
-                      }
-                    );
-
-                    Fluttertoast.showToast(msg: 'You Pressed the button', toastLength: Toast.LENGTH_SHORT,);
-                    setState(() {
-                      getContactsFormDBC();
-                    });
+                    Navigator.pushNamed(context, "/second");
                   },
                 )
         ],
@@ -59,14 +42,15 @@ class MyCompleteListState extends State<MyCompleteList> {
         child: Container(
           padding: EdgeInsets.all(16.0),
           child: FutureBuilder<List<Contact>>(
-            future: getContactsFormDBC(),
+            future: getContactsFormDB(),
             builder: (context, snapshot) {
+              print(snapshot.data);
               if (snapshot.data != null) {
-                if (snapshot.hasData) {
+                if (snapshot.data.length > 0) {
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
-                      return new Row(
+                      return Row(
                         children: <Widget>[
                           Expanded(
                             child: Column(
@@ -82,21 +66,21 @@ class MyCompleteListState extends State<MyCompleteList> {
                             ),
                           ),
 
-                          //update/del button
+                          //update/
                           GestureDetector(
                             onTap: () {
                               var dbHelper = DBHelper();
                               Contact contact = new Contact();
                               contact.id = snapshot.data[index].id;
-                              contact.done = 0;
+                              contact.done = 1;
                               dbHelper.updateContact(contact);
-                              Fluttertoast.showToast(msg: 'Subject was uncheck', toastLength: Toast.LENGTH_SHORT,);
+                              Fluttertoast.showToast(msg: 'Subject was check', toastLength: Toast.LENGTH_SHORT,);
                               setState(() {
-                               getContactsFormDBC();
+                               getContactsFormDB(); 
                               });
                             },
                             child: Icon(
-                              Icons.check_box,
+                              Icons.check_box_outline_blank,
                               color: Colors.red,
                             ),
                           ),
@@ -105,13 +89,21 @@ class MyCompleteListState extends State<MyCompleteList> {
                     },
                   );
                 }
+                else{
+                return new Container(
+                alignment: AlignmentDirectional.center,
+                child: Text("No data found.."),
+                );
+                }
               }
 
-              //show loading while snap shot not getting data
-              return new Container(
+              //show text while snap shot not getting data
+              else{
+                return new Container(
                 alignment: AlignmentDirectional.center,
-                child: new CircularProgressIndicator(),
-              );
+                child: Text("No data found.."),
+                );
+              }
             },
           ),
         ),
