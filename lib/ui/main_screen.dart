@@ -1,5 +1,15 @@
+import 'package:assign_02/database/DBhelper.dart';
+import 'package:assign_02/model/Contact.dart';
+import 'contact_list.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'placeholder.dart';
+
+Future<List<Contact>> getContactsFormDBAll() async {
+  var dbHelper = DBHelper();
+  Future<List<Contact>> contacts = dbHelper.getContactsAll();
+  return contacts;
+}
 
 class MainScreen extends StatefulWidget {
   @override
@@ -11,34 +21,14 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    PlaceholderWidget(Colors.white),
-    PlaceholderWidget(Colors.deepOrange),
+    MyContactList(),
+    MyCompleteList(),
   ];
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo'),
-        actions: <Widget>[
-          _currentIndex == 0
-              ? new FlatButton(
-                  child: new IconTheme(
-                    data: new IconThemeData(color: Colors.white),
-                    child: new Icon(Icons.add),
-                  ),
-                  onPressed: () {},
-                )
-              : new FlatButton(
-                  child: new IconTheme(
-                    data: new IconThemeData(color: Colors.white),
-                    child: new Icon(Icons.delete),
-                  ),
-                  onPressed: () {},
-                ),
-        ],
-      ),
       body: _children[_currentIndex], // new
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped, // new
@@ -63,3 +53,4 @@ class MainScreenState extends State<MainScreen> {
     });
   }
 }
+

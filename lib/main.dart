@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'ui/main_screen.dart';
-
+import 'ui/add_screen.dart';
+// import 'ui/contact_list.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => MainScreen(),
+        "/second": (context) => AddScreen()
       },
     );
   }
