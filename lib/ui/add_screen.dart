@@ -1,5 +1,7 @@
 import 'package:assign_02/database/DBhelper.dart';
 import 'package:assign_02/model/Contact.dart';
+import 'package:assign_02/ui/main_screen.dart';
+// import 'package:assign_02/ui/todo_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -16,7 +18,7 @@ class AddScreen extends StatefulWidget {
 
 class AddScreenState extends State<AddScreen>{
   Contact contact = new Contact();
-  String name;
+  String title;
 
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
@@ -38,7 +40,7 @@ class AddScreenState extends State<AddScreen>{
               keyboardType: TextInputType.text,
               decoration: InputDecoration(labelText: "Subject"),
               validator: (val) => val.length == 0 ? "Please fill subject": null,
-              onSaved: (val) => this.name = val,
+              onSaved: (val) => this.title = val,
             ),
             new Container(
               // margin: const EdgeInsets.only(top: 10.0),
@@ -57,13 +59,14 @@ class AddScreenState extends State<AddScreen>{
   void submitContact(){
     if(this.formKey.currentState.validate()){
       formKey.currentState.save();
+      Navigator.pop(context,true);
     }
     else{
       return null;
     }
 
     var contact = Contact();
-    contact.name = name;
+    contact.title = title;
     contact.done = 0;
 
     var dbHelper = DBHelper();

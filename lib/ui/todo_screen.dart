@@ -58,7 +58,7 @@ class MyTodoListState extends State<MyTodoList> {
                               children: <Widget>[
                                 Container(
                                   padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(snapshot.data[index].name,
+                                  child: Text(snapshot.data[index].title,
                                       style:
                                           TextStyle(fontWeight: FontWeight.bold)),
                                 ),
