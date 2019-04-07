@@ -34,21 +34,6 @@ class DBHelper {
 
   //Get Contract
 
-  Future<List<Contact>> getContactsAll() async{
-    var db_connection = await db;
-    List<Map> list = await db_connection.rawQuery("SELECT * FROM $TABLE_NAME");
-    List<Contact> contacts = new List();
-    for (int i = 0;i < list.length; i++){
-      Contact contact = new Contact();
-      contact.id = list[i]['id'];
-      contact.name = list[i]['name'];
-      contact.done = list[i]['done'];
-
-      contacts.add(contact);
-    }
-    return contacts;
-  }
-
   Future<List<Contact>> getContacts() async{
     var db_connection = await db;
     List<Map> list = await db_connection.rawQuery("SELECT * FROM $TABLE_NAME WHERE done = 0");

@@ -1,14 +1,7 @@
-import 'package:assign_02/database/DBhelper.dart';
-import 'package:assign_02/model/Contact.dart';
+
 import 'complete_screen.dart';
 import 'package:flutter/material.dart';
 import 'todo_screen.dart';
-
-Future<List<Contact>> getContactsFormDBAll() async {
-  var dbHelper = DBHelper();
-  Future<List<Contact>> contacts = dbHelper.getContactsAll();
-  return contacts;
-}
 
 class MainScreen extends StatefulWidget {
   @override
